@@ -2,10 +2,10 @@
 
 ## Identificación
 
-- Integrantes: [Completar]
-- Curso y sección: [Completar]
+- Integrantes: Bárbara Oyarzo Alfaro
+- Curso y sección: Ingeniería Web Avanzada
 - URL del repositorio: [Completar]
-- Fecha: [Completar]
+- Fecha: 09-11-2026
 
 ## Objetivo y alcance
 
@@ -62,7 +62,7 @@ python app.py --comprobar
 
 La comprobación funciona con los cuatro bloques sin completar. Debe informar
 12 recursos, 4 usuarios y una matriz TF-IDF de 12 filas. Registre el comando de
-activación que utilizó: [Completar]. Al finalizar, registre las versiones instaladas:
+activación que utilizó: .venv\Scripts\Activate.ps1. Al finalizar, registre las versiones instaladas:
 
 ```bash
 python -m pip freeze > requirements.txt
@@ -123,35 +123,63 @@ puntuaciones y explique qué evidencia respalda cada resultado.
 
 | Caso | Entrada o acción | Resultado esperado | Resultado observado y evidencia | Estado |
 |---|---|---|---|---|
-| T1 | Recomendar para u1 y u2 sin interacciones | R02 primero para u1; R07 primero para u2; orden descendente, máximo 3 y puntuaciones positivas. | [Completar] | [Cumple / No cumple] |
-| T2 | u1 indica Me interesa sobre R04 y se recalcula | Cambia el perfil; R04 pasa al primer lugar; aumenta la puntuación de R05; se conservan los 12 candidatos. | [Completar] | [Cumple / No cumple] |
-| T3 | Consultar u2 después de la interacción de u1 | El perfil, el historial y las puntuaciones de u2 se mantienen. | [Completar] | [Cumple / No cumple] |
-| T4 | Recomendar para u3 y u4 | Cero puntuaciones positivas, lista vacía y mensaje informativo para ambos. | [Completar] | [Cumple / No cumple] |
+| T1 | Recomendar para u1 y u2 sin interacciones | R02 primero para u1; R07 primero para u2; orden descendente, máximo 3 y puntuaciones positivas. | 	u1 recibió R02, R12 y R03. u2 recibió R07, R08 y R09. Las recomendaciones están ordenadas correctamente. | Cumple |
+| T2 | u1 indica Me interesa sobre R04 y se recalcula | Cambia el perfil; R04 pasa al primer lugar; aumenta la puntuación de R05; se conservan los 12 candidatos. | Al valorar R04, cambió el perfil de u1. R04 pasó al primer lugar y R05 aumentó de 0.0000 a 0.4378. Se mantuvieron los 12 recursos. | Cumple |
+| T3 | Consultar u2 después de la interacción de u1 | El perfil, el historial y las puntuaciones de u2 se mantienen. | El perfil, las recomendaciones y el historial de u2 no cambiaron después de la interacción de u1. | Cumple |
+| T4 | Recomendar para u3 y u4 | Cero puntuaciones positivas, lista vacía y mensaje informativo para ambos. | u3 y u4 no recibieron recomendaciones porque sus intereses estaban vacíos o no eran reconocidos. Se mostró un mensaje informativo. | Cumple |
+
 
 ### Comparación de la adaptación
 
-- Perfil de u1 antes de valorar R04: [Completar]
-- Perfil de u1 después de valorar R04: [Completar]
-- Puntuación de R05 antes y después: [Completar]
-- Por qué ese cambio es evidencia de adaptación: [Completar]
-- Problemas detectados y acciones realizadas: [Completar]
+- Perfil de u1 antes de valorar R04: {"pandas": 0.753247, "datos": 0.465091, "python": 0.465091}.
+- Perfil de u1 después de valorar R04: {"python": 0.637116, "api": 0.446269, "web": 0.446269, "pandas": 0.376477, "datos": 0.232455}
+- Puntuación de R05 antes y después: aumentó de 0.0000 a 0.4378.
+- Por qué ese cambio es evidencia de adaptación: porque al valorar R04, el sistema agregó nuevos intereses al perfil y cambió las recomendaciones. R05 aumentó su puntuación sin haber sido seleccionado.
+- Problemas detectados y acciones realizadas: se completaron las cuatro funciones pendientes y se realizaron las pruebas. Todas funcionaron correctamente.
+
 
 No sustituya estas observaciones por cifras inventadas. Use los resultados de su ejecución.
 
 ## Preguntas evaluadas
 
 1. ¿Qué información describe el contenido de los recursos y qué información constituye el perfil del usuario? Identifique ambas en los archivos del proyecto.
-   Respuesta: [Completar]
+   Respuesta: 
+
+En recursos.csv se encuentran el ID, título, descripción y etiquetas de cada recurso. Solo las etiquetas se utilizan para calcular la similitud. En perfiles.json se almacenan los usuarios y sus intereses iniciales, que se convierten en vectores TF-IDF
+
+
 2. ¿Por qué se utiliza fit_transform sobre el catálogo y transform sobre los intereses del usuario? ¿Qué problema causaría ajustar un vectorizador diferente para cada perfil?
-   Respuesta: [Completar]
+   Respuesta: 
+
+fit_transform() construye el vocabulario y los vectores del catálogo, mientras que transform() sirve para represetnar los intereses utilizando ese mismo vocabulario. Utilizar vectorizadores diferentes produciría vectores incompatibles y similitudes incorrectas
+
 3. ¿Por qué el mismo catálogo puede producir recomendaciones distintas para u1 y u2? ¿Una similitud de 0,80 significa que existe un 80 % de probabilidad de que el recurso guste? Justifique.
-   Respuesta: [Completar]
+   Respuesta: 
+
+Porque cada usuario tiene intereses diferentes, por ejemplo u1 se relaciona con Python y datos, mientras que u2 con Angular. Una similitud de 0,80 no representa una probabilidad, sino el grado de coincidencia entre dos vectores
+
 4. ¿En qué se diferencia modificar manualmente los intereses iniciales de la adaptación implementada? Identifique el evento que provoca el cambio, el estado modificado y su efecto observable.
-   Respuesta: [Completar]
+   Respuesta: 
+
+La adaptación ocurre automáticamente cuando el usuario selecciona "Me interesa". Esto actualiza su vector mediante actualizar_perfil(), registra la interacción y recalcula las recomendaciones sin modificar los intereses iniciales del JSON
+
 5. Relacione su implementación con las etapas del ciclo MAPE-K estudiado en clase: Monitorizar, Analizar, Planificar, Ejecutar y Conocimiento. Indique una función, operación o dato de su programa para cada etapa.
-   Respuesta: [Completar]
+   Respuesta: 
+   
+Monitorizar: registrar la interacción "Me interesa"
+
+Analizar: calcular similitudes mediante calcular_puntuaciones()
+
+Planificar: seleccionar y ordenar recursos mediante recomendar()
+
+Ejecutar: modificar el vector utilizando actualizar_perfil()
+
+Conocimiento: mantener los perfiles, historiales y vectores TF-IDF
+
 6. Indique una limitación del mecanismo implementado y proponga una mejora concreta. Explique qué dato adicional o qué cambio del algoritmo exigiría esa mejora.
-   Respuesta: [Completar]
+   Respuesta: 
+   
+Una limitación del mecanismo podría ser que el sistema solo considera interacciones positivas. Una mejora sería incorporar "No me interesa", registrando valoraciones negativas y modificando el algoritmo para reducir la influencia de recursos rechazados en futuras recomendaciones
 
 ## Archivos de la entrega
 
