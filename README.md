@@ -4,7 +4,7 @@
 
 - Integrantes: Bárbara Oyarzo Alfaro
 - Curso y sección: Ingeniería Web Avanzada
-- URL del repositorio: [Completar]
+- URL del repositorio: https://github.com/himehaku/laboratorio3.git
 - Fecha: 09-11-2026
 
 ## Objetivo y alcance
